@@ -1,12 +1,12 @@
 #  __author__ = "Vũ Đức Cường"
-#  ___date__ = 9/28/22, 9:33 AM
+#  ___date__ = 10/1/22, 1:55 PM
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette import status
 
-from app.core.crud.company import CompanyRepository
-from app.core.dependency.get_db import get_db
-from app.schemas.company import CreateCompanyVM
+from jobsearch_company.schemas import CreateCompanyVM
+from src.core.crud.company import CompanyRepository
+from src.core.dependency.get_db import get_db
 
 router = APIRouter(
     prefix="/companies",

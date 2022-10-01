@@ -2,7 +2,7 @@
 #  ___date__ = 9/28/22, 10:24 AM
 from typing import Generator
 
-from app.core.database import SessionLocal
+from database import SessionLocal
 
 
 def get_db() -> Generator:

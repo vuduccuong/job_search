@@ -4,8 +4,8 @@ from typing import Optional, Dict
 
 from sqlalchemy.orm import Session
 
-from app.core.entities.company import Company
-from app.schemas.company import CreateCompanyVM
+from jobsearch_company.models import Company
+from jobsearch_company.schemas import CreateCompanyVM
 
 
 class CompanyRepository:

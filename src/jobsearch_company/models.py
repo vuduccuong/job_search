@@ -1,9 +1,9 @@
 #  __author__ = "Vũ Đức Cường"
-#  ___date__ = 9/28/22, 9:36 AM
+#  ___date__ = 10/1/22, 1:56 PM
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
 
-from app.core.database import Base
+from database import Base
 
 
 class Company(Base):
