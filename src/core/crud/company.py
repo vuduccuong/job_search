@@ -14,12 +14,15 @@ class CompanyRepository:
         return db.query(Company).all()
 
     @classmethod
-    async def create_company(cls, company_vm: CreateCompanyVM, db: Session):
+    async def create_company(
+        cls, company_vm: CreateCompanyVM, user_id: int, db: Session
+    ):
         company_entity = Company()
         company_entity.name = company_vm.name
         company_entity.address = company_vm.address
         company_entity.employee_total = company_vm.employee_total
         company_entity.website = company_vm.website
+        company_entity.created_by = user_id
 
         db.add(company_entity)
         db.commit()
