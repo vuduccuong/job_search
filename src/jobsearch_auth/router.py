@@ -4,7 +4,6 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Body
 from sqlalchemy.orm import Session
-from starlette.requests import Request
 
 from core.dependency.get_db import get_db
 from core.services.password import PasswordService
