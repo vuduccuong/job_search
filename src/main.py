@@ -10,7 +10,6 @@ from jobsearch_auth.router import router as auth_router
 from jobsearch_tts.router import router as tts_router
 from database import Base, engine
 
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.include_router(company_router)
@@ -18,6 +17,11 @@ app.include_router(auth_router)
 app.include_router(tts_router)
 
 templates = Jinja2Templates(directory="templates")
+
+
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
 
 
 @app.get("/")

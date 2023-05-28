@@ -5,9 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-SQLALCHEMY_DATABASE_URL = (
-    "mysql+mysqldb://root:mysqlpw@host.docker.internal:49153/jobcare_dev"
-)
+SQLALCHEMY_DATABASE_URL = "mysql+mysqldb://root:G7e3KSMED@localhost:3306/jobcare_dev"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, bind=engine)

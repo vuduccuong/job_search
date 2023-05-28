@@ -3,6 +3,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Body
+from fastapi_pagination import Params, paginate
 from sqlalchemy.orm import Session
 
 from core.dependency.get_db import get_db
@@ -18,12 +19,14 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.get("/")
-async def get_users(q: Optional[str] = None, db: Session = Depends(get_db)):
+async def get_users(
+    q: Optional[str] = None, db: Session = Depends(get_db), params: Params = Depends()
+):
     query = db.query(AppUser)
     if q:
         query = query.filter(AppUser.email == q)
 
-    return query.all()
+    return paginate(query.all(), params)
 
 
 @router.post("/")

@@ -3,7 +3,6 @@
 from typing import Dict
 
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
 from sqlalchemy.orm import Session
 

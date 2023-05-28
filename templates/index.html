@@ -3,11 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
     <h1>Welcome</h1>
-<video controls preload="metadata">
-    <source src="https://rr3---sn-8qj-q5qel.googlevideo.com/videoplayback?expire=1666591685&ei=ZddVY_Z4yZCpAeSHgNgI&ip=14.236.4.248&id=o-AFC79c8yAZmLFXLSd61wMZps-C9Zo15XbHowCVYp68ao&itag=22&source=youtube&requiressl=yes&mh=-G&mm=31%2C29&mn=sn-8qj-q5qel%2Csn-i3belne6&ms=au%2Crdu&mv=m&mvi=3&pcm2cms=yes&pl=25&initcwndbps=1533750&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=296.031&lmt=1575180274501354&mt=1666569667&fvip=4&fexp=24001373%2C24007246&c=ANDROID&txp=5535432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRQIgWWnQMt0qEcJKb1NN-DHKVa3PqVTqre-GgJM_2YYLu8QCIQD-kKHxovr-s7UuK0EV2mfFJixoPE3qwmE4OJc09AfIdg%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpcm2cms%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRAIgJGS6koTo1aoLW97K2Lr_CBDLLND3QrdpRU4hVX1PIl8CICtyfQvLx5NPzRBX1cWqEcGnS9kf-C8Z_AX8u0_zeGUa" type="video/mp4" />
-</video>
+    <div class="form-group d-flex">
+        <input type="text" class="form-control me-4 col-1 col-sm-2 w-75" id="keyword"/>
+        <button type="button" class="btn btn-primary" id="btn-search">Search</button>
+    </div>
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container" >
+            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-5 g-3" id="video-list"></div>
+        </div>
+    </div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script>
+$('#audio-player').show();
+const btnSearch = $('#btn-search');
+let keyword = $('#keyword');
+$(btnSearch).hide();
+$(keyword).off('input').on('input', function (e){
+    if(!e.target.value) {
+        $(btnSearch).hide();
+        return
+    }
+    $(btnSearch).show();
+
+})
+
+$('body').on('click', '#btn-listen', function (e){
+    const btn = e.currentTarget
+    const urlWatch = $(btn).data("watch");
+    const videoId = $(btn).data("video");
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", `/ttsyoutube_to_mp3?url=${urlWatch}`, true); // Thay {video_id} bằng video ID cụ thể
+    xhr.responseType = "blob";
+
+    xhr.onload = function(event) {
+      if (xhr.status === 200) {
+        let blob = xhr.response;
+        let url = URL.createObjectURL(blob); // Tạo URL từ dữ liệu blob
+         $(`#${videoId}`).attr('src', url)
+         $(`#${videoId}`).show()
+        $(`#${videoId}`)[0].play()
+      }
+    };
+
+    xhr.send();
+})
+
+
+$(btnSearch).off('click').on('click', function (){
+    const keywordInput = $('#keyword').val();
+    $.get(`/tts/youtube?q=${keywordInput}`,function (res){
+        $('#video-list li').remove();
+        let liList = res.data.map(item=> {
+            return `<div class="col">
+                        <div class="card shadow-sm">
+                            <img src="${item.thumbnail_url}" alt="${item.title}" width="auto" height="auto" />
+                            <title></title>
+                            <div class="card-body">
+                              <p class="card-text">${item.title}</p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-listen" data-watch=${item.watch_url} data-video=${item.video_id}>Nghe audio</button>
+                                  <audio id=${item.video_id} src="" style="display: none" controls></audio>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>`
+        })
+        console.log(liList)
+        $('#video-list')[0].innerHTML =  liList.join()
+    }
+    )
+})
+</script>
 </body>
 </html>

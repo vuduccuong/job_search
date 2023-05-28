@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: placetopay/mysql.8.0-pipelines
+    environment:
+      MYSQL_DATABASE: jobcare_dev
+      MYSQL_ROOT_PASSWORD: G7e3KSMED
+    ports:
+      - 3306:3306
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
